@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="paperPlay.css">
+    <script type="text/javascript" src="paper-full.js"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+
+      var count = 150;
+
+      var path = new Path.Rectangle({
+	      point: [75, 75],
+	      size: [75, 75],
+        // strokeColor: 'darkslategrey',
+        fillColor: '#608fc0'
+      });
+
+      // var symbol1 = new Symbol(path);
+
+      var symbol = new Symbol(path);
+
+      for (var i = 0; i < count; i++) {
+        var point = Point.random() * view.size;
+        var placedSymbol1 = symbol.place(point);
+        placedSymbol1.scale(i / count);
+        placedSymbol1.fillColor = Color.random();
+      }
+
+      // The onFrame function is called up to 60 times a second:
+      function onFrame(event) {
+
+        symbol.definition.fillColor.hue += placedSymbol1.bounds.width * .008;
+
+      	// Run through the active layer's children list and change
+      	// the position of the placed symbols:
+      	for (var i = 0; i < count; i++) {
+
+          var item = project.activeLayer.children[i];
+
+
+      		// Move the item 1/20th of its width to the right. This way
+      		// larger circles move faster than smaller circles:
+
+          if(i % 3 == 0){
+            item.rotate(-20/item.bounds.width)
+            item.position.x -= item.bounds.width / 20;
+            if (item.bounds.right < 0) {
+              item.position.x = view.size.width;
+            }
+          } else {
+            item.position.x += item.bounds.width / 20;
+            item.rotate(35/item.bounds.width);}
+
+      		// If the item has left the view on the right, move it back
+      		// to the left:
+      		if (item.bounds.left > view.size.width) {
+      			item.position.x = -item.bounds.width;
+      		}
+
+      	}
+      }
+    </script>
+    <title>Playing with Paper</title>
+  </head>
+  <body>
+    <canvas id="myCanvas" resize="true"></canvas>
+  </body>
+</html>

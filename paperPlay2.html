@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="paperPlay.css">
+    <script type="text/javascript" src="paper-full.js"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+
+      var clones = 60;
+      var angle = 360 / clones;
+      var clonedPaths = [];
+      // var clonedTriangles = [];
+      // var clonedSquares = [];
+
+      var point = view.center;
+
+
+      // var triangle = new Path.RegularPolygon({
+      //   center: point,
+      //   sides: 3,
+      //   radius: 75,
+      //   fillColor: '#9f703f'
+      // })
+      //
+      // var square = new Path.Rectangle({
+      //   size: [50, 50],
+      //   point: point,
+      //   fillColor: '#78789f'
+      // })
+
+      var path = new Path.Rectangle({
+        point: point,
+	      size: [25, 1000],
+        // strokeColor: 'darkslategrey',
+        fillColor: '#608fc0'
+      });
+
+      // var circle = new Path.Circle({
+      //   center: point,
+      //   radius:50,
+      //   fillColor:'#608fc0'
+      // })
+
+      for (var i = 0; i < clones; i++) {
+        var clonedPath = path.clone();
+        // var clonedTriangle = triangle.clone();
+        // var clonedSquare = square.clone();
+        clonedPath.center = point;
+        // clonedTriangle.center = point;
+        // clonedSquare.point = point;
+        clonedPath.rotate(angle * i, path.bounds.topCenter);
+        // clonedTriangle.rotate(angle * i, triangle.bounds.leftCenter);
+        // clonedSquare.rotate(angle * i, square.bounds.topLeft);
+        clonedPaths.push(clonedPath);
+        // clonedTriangles.push(clonedTriangle);
+        // clonedSquares.push(clonedSquare);
+      }
+
+      path.remove();
+      // triangle.remove();
+      // square.remove();
+
+      function onMouseMove(event) {
+        // var sine = Math.sin(event.delta.length);
+        // circle.scale(sine * 100);
+        for (var i = 0; i < clonedPaths.length; i++){
+          clonedPaths[i].fillColor.hue += angle * ((i % 60) + 1) / 180;
+          // clonedTriangles[i].fillColor.hue += event.delta.length/70;
+          // clonedSquares[i].fillColor.hue += event.delta.length/70;
+          clonedPaths[i].rotate(event.delta.length / 10);
+
+
+          // clonedTriangles[i].rotate(event.delta.length / 10, point);
+          // clonedSquares[i].rotate(event.delta.length / 10, clonedSquares[i].bounds.bottomRight);
+        }
+      }
+
+      // var symbol1 = new Symbol(path);
+
+      // The onFrame function is called up to 60 times a second:
+
+    </script>
+    <title>paperPlay2</title>
+  </head>
+  <body>
+    <canvas id="myCanvas" resize="true"></canvas>
+  </body>
+</html>
